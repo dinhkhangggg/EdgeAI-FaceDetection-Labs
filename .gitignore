@@ -1,0 +1,52 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# C/C++ object files (if any OpenCV compilation happens)
+*.o
+*.ko
+*.obj
+*.elf
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# Virtualenv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Model checkpoint & Cache (Optional, uncomment if you don't want to push weights)
+# *.pt
+# *.onnx
+# *.h5
+# *.pb
