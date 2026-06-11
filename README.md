@@ -79,8 +79,8 @@ pip install tflite-runtime
 
 ---
 
-## 📊 Telemetry & Benchmark System
-Xuyên suốt các Lab (từ Lab 5 đến 7), repository tích hợp một module `utils.py` cực kỳ mạnh mẽ chứa **Telemetry Profiler**. Module này chịu trách nhiệm:
+## 📊 Hệ thống Đo lường và Đánh giá hiệu năng (Telemetry & Benchmark)
+Xuyên suốt các Lab (từ Lab 5 đến 7), repository tích hợp một module `utils.py` cực kỳ mạnh mẽ chứa **Bộ giám sát hiệu năng**. Module này chịu trách nhiệm:
 - Bóc tách và đo lường độ trễ (Latency) tới mức mili-giây của từng Node: `Capture (I/O)`, `Inference (Compute)`, `Display (Render)`.
 - Xác định điểm nghẽn (Bottleneck) chính xác yếu điểm của hệ thống.
 - Thực thi thuật toán `NMS` (Non-Maximum Suppression) phiên bản thuần `NumPy` để loại bỏ sự phụ thuộc nặng nề vào TensorFlow backend.
