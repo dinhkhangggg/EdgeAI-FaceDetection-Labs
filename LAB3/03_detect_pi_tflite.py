@@ -21,8 +21,8 @@ out_dtype = output_details[0]['dtype']
 img = cv2.imread(IMAGE_PATH)
 h, w, _ = img.shape
 
-# ===== SCALE AUTO (QUAN TRONG) =====
-scale_ui = max(h, w) / 640   # scale theo anh
+# ===== SCALE AUTO (IMPORTANT) =====
+scale_ui = max(h, w) / 640   # scale according to image
 thickness = int(3 * scale_ui)
 font_scale = 1.2 * scale_ui
 font_thickness = int(2 * scale_ui)
@@ -77,7 +77,7 @@ if len(indices) > 0:
         x, y, w_box, h_box = boxes[i]
         conf = scores[i]
         
-        color = (255, 0, 0)  # xanh duong
+        color = (255, 0, 0)  # blue
         
         # ===== DRAW BOX =====
         cv2.rectangle(img, (x, y), (x + w_box, y + h_box), color, thickness)
@@ -86,10 +86,10 @@ if len(indices) > 0:
         label = f"{conf:.2f}"
         (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX,
                                       font_scale, font_thickness)
-        # padding cho dep
+        # padding for better appearance
         pad = int(6 * scale_ui)
         
-        # ===== NEN =====
+        # ===== BACKGROUND =====
         cv2.rectangle(img,
                       (x, y - th - pad),
                       (x + tw + pad, y),
@@ -108,7 +108,7 @@ if len(indices) > 0:
                     
     print("Detected:", len(indices), "faces")
 else:
-    print("Khong detect duoc gi")
+    print("Nothing detected")
 
 # ===== SAVE =====
 cv2.imwrite("result.jpg", img)

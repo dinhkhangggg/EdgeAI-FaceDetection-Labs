@@ -1,12 +1,12 @@
 import cv2
 cap = cv2.VideoCapture(0)
 if not cap.isOpened():
-    raise RuntimeError("Khong mo duoc camera.")
-print("Nhan q de thoat.")
+    raise RuntimeError("Cannot open camera.")
+print("Press q to quit.")
 while True:
     ret, frame = cap.read()
     if not ret:
-        print("Khong doc duoc frame.")
+        print("Cannot read frame.")
         break
     cv2.imshow("Test Camera", frame)
     if cv2.waitKey(1) & 0xFF == ord("q"):

@@ -37,7 +37,7 @@ for img_name in sorted(os.listdir(IMG_DIR)):
     lbl_path = label_path_for_image(img_name)
     if len(faces) == 0:
         no_face_list.append(img_name)
-        # tao file nhan rong de dong bo
+        # create empty label file for synchronization
         open(lbl_path, "w", encoding="utf-8").close()
         continue
         
@@ -45,12 +45,12 @@ for img_name in sorted(os.listdir(IMG_DIR)):
         for (x, y, w, h) in faces:
             f.write(f"{x} {y} {w} {h}\n")
 
-# ghi log
+# write log
 log_path = os.path.join(LOG_DIR, "no_face_images.txt")
 with open(log_path, "w", encoding="utf-8") as f:
     for name in no_face_list:
         f.write(name + "\n")
 
-print("Da tao nhan cho anh trong:", LBL_DIR)
-print("So anh khong phat hien khuon mat:", len(no_face_list))
-print("Danh sach luu tai:", log_path)
+print("Created labels for images in:", LBL_DIR)
+print("Number of images with no face detected:", len(no_face_list))
+print("List saved at:", log_path)

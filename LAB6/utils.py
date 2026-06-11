@@ -2,8 +2,8 @@ import time, psutil, numpy as np, cv2
  
 class Telemetry:
     """
-    Class Telemetry: Module giám sát hiệu năng hệ thống (Profiler) theo thời gian thực.
-    Đo đạc Throughput (FPS) và phân chia Latency (Cap, Inf, Disp, E2E) để xác định Bottleneck.
+    Class Telemetry: Real-time system performance monitoring module (Profiler).
+    Measures Throughput (FPS) and breaks down Latency (Cap, Inf, Disp, E2E) to identify Bottlenecks.
     """
     def __init__(self, name="AIoT-Pipeline"):
         self.name = name
@@ -43,7 +43,7 @@ class Telemetry:
  
 def nms_numpy(boxes, scores, threshold=0.45):
     """
-    Thuật toán Non-Maximum Suppression (NMS) viết hoàn toàn bằng NumPy.
+    Non-Maximum Suppression (NMS) algorithm written entirely in NumPy.
     """
     if len(boxes) == 0: return []
     boxes, scores = np.array(boxes), np.array(scores)

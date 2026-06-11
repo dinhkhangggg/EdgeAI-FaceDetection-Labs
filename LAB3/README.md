@@ -1,42 +1,42 @@
-# Báo Cáo Thực Hành Lab 3
-**Chủ đề: Lượng tử hóa INT8 và chạy Face Detection YOLOv8 trên Raspberry Pi**
+# Lab 3 Practical Report
+**Topic: INT8 Quantization and YOLOv8 Face Detection on Raspberry Pi**
 
-## Mục tiêu bài Lab
-1. Triển khai mô hình nhận diện khuôn mặt (Face Detection) dựa trên kiến trúc YOLO trên nền tảng Raspberry Pi.
-2. Thực hiện tối ưu hóa mô hình bằng kỹ thuật lượng tử hóa (Quantization - INT8) để giảm kích thước và tăng tốc độ xử lý trên phần cứng nhúng.
-3. Đánh giá hiệu năng thực tế thông qua các chỉ số: Latency (Độ trễ) và FPS (Khung hình trên giây) để so sánh giữa bản Float32 và bản INT8.
+## Lab Objectives
+1. Deploy a Face Detection model based on the YOLO architecture on the Raspberry Pi platform.
+2. Optimize the model using Quantization (INT8) techniques to reduce size and increase processing speed on embedded hardware.
+3. Evaluate real-world performance through metrics: Latency and FPS (Frames Per Second) to compare the Float32 and INT8 versions.
 
-## Chuẩn bị môi trường & Export Mô hình
-- Cài đặt `ultralytics`, `ai-edge-litert` (hoặc `tflite-runtime`), `opencv-python`.
-- Để chuyển đổi mô hình (PTQ - Post Training Quantization) sang INT8 trên PC:
+## Environment Setup & Model Export
+- Install `ultralytics`, `ai-edge-litert` (or `tflite-runtime`), `opencv-python`.
+- To convert the model (PTQ - Post Training Quantization) to INT8 on a PC:
   ```bash
   yolo export model=runs/detect/train/weights/best.pt format=tflite int8=True data=dataset_yolo/data.yaml
   ```
-- Kết quả nhận được bao gồm 2 file chính để test: `best_float32.tflite` và `best_full_integer_quant.tflite` (hoặc `best_int8.tflite`).
+- The received results include 2 main files for testing: `best_float32.tflite` and `best_full_integer_quant.tflite` (or `best_int8.tflite`).
 
-## Hướng dẫn các script
+## Script Guide
 
-Trong folder này có 4 file script trích xuất từ báo cáo:
+This folder contains 4 scripts extracted from the report:
 
 1. **`01_check_model_int8.py`**: 
-   Dùng để kiểm tra nhanh file TFLite. Báo cáo chi tiết Input/Output tensor type và tham số quantization (scale, zero-point). 
+   Used to quickly inspect the TFLite file. Provides detailed reports on Input/Output tensor types and quantization parameters (scale, zero-point). 
 
 2. **`02_detect_pc_ultralytics.py`**: 
-   Chạy dự đoán trên máy tính (PC) sử dụng trực tiếp thư viện `ultralytics`. Pipeline tiền/hậu xử lý được thực hiện tự động.
+   Runs predictions on a PC using the `ultralytics` library directly. The pre/post-processing pipeline is handled automatically.
 
 3. **`03_detect_pi_tflite.py`**: 
-   Script chuyên dụng để chạy trên Raspberry Pi bằng thư viện `tflite_runtime` (hoặc `ai_edge_litert`). Pipeline nhận diện phải viết thủ công: chuẩn hóa kích thước, lượng tử hóa đầu vào (nếu là INT8), gọi Interpreter, giải lượng tử hóa, tính toán lại Bounding Box và áp dụng NMS (Non-Maximum Suppression). 
+   A dedicated script to run on Raspberry Pi using the `tflite_runtime` (or `ai_edge_litert`) library. The detection pipeline must be written manually: size normalization, input quantization (if INT8), calling Interpreter, dequantization, Bounding Box recalculation, and applying NMS (Non-Maximum Suppression). 
 
 4. **`04_benchmark_tflite.py`**: 
-   Dùng để benchmark đo tốc độ (FPS, Latency, P50, P90, P99) mô hình TFLite (Float32 hoặc INT8) qua 100 lần lặp. Có thể chạy trên PC hoặc Pi để so sánh. 
+   Used to benchmark model speed (FPS, Latency, P50, P90, P99) of the TFLite model (Float32 or INT8) across 100 iterations. Can be run on PC or Pi for comparison. 
 
-## Tổng hợp kết quả thực nghiệm
+## Summary of Experimental Results
 
-1. **Kích thước mô hình:**
-   - INT8 nhỏ hơn Float32 khoảng **3.7 lần** (do chuyển từ 32-bit xuống 8-bit).
-2. **Trên Máy Tính (PC - x86_64):**
-   - **Tốc độ:** INT8 đạt ~39 FPS (25.6 ms), Float32 đạt ~13 FPS (75 ms) -> Nhanh hơn gần **3 lần**. (PC hỗ trợ rất tốt tập lệnh SIMD/AVX cho số nguyên).
-   - **Độ chính xác:** Do đây là Post-Training Quantization (PTQ) chưa áp dụng QAT, độ tin cậy (Confidence) của INT8 giảm đáng kể (từ 0.95 xuống khoảng 0.50).
-3. **Trên Raspberry Pi (ARM):**
-   - **Tốc độ:** INT8 đạt ~1.55 FPS (645 ms), Float32 đạt ~1.11 FPS (902 ms) -> Tốc độ chỉ tăng **1.4 lần**. Nguyên nhân do kiến trúc ARM hỗ trợ SIMD hạn chế hơn, đồng thời CPU phải gánh thêm nhiều chi phí overhead từ Python và xử lý tiền/hậu xử lý ảnh.
-   - **Độ chính xác:** Tương tự như trên PC, phiên bản lượng tử hóa có sự sụt giảm độ tin cậy. Tuy nhiên, Float32 trên Pi (0.93) cũng hơi lệch nhẹ so với PC (0.95) do quy trình tiền/hậu xử lý tự viết thủ công bằng OpenCV không hoàn toàn tương đồng 100% với hàm ẩn bên trong framework Ultralytics.
+1. **Model Size:**
+   - INT8 is about **3.7 times** smaller than Float32 (due to converting from 32-bit to 8-bit).
+2. **On PC (x86_64):**
+   - **Speed:** INT8 reached ~39 FPS (25.6 ms), Float32 reached ~13 FPS (75 ms) -> Nearly **3 times faster**. (PC has excellent support for SIMD/AVX instruction sets for integers).
+   - **Accuracy:** Because this is Post-Training Quantization (PTQ) without QAT applied, the Confidence of INT8 decreased significantly (from 0.95 to about 0.50).
+3. **On Raspberry Pi (ARM):**
+   - **Speed:** INT8 reached ~1.55 FPS (645 ms), Float32 reached ~1.11 FPS (902 ms) -> Speed only increased by **1.4 times**. The reason is that ARM architectures have more limited SIMD support, and the CPU has to carry additional overhead from Python and image pre/post-processing.
+   - **Accuracy:** Similar to the PC, the quantized version experienced a drop in confidence. However, Float32 on Pi (0.93) is also slightly off compared to PC (0.95) because the manually written pre/post-processing pipeline via OpenCV is not 100% identical to the hidden functions inside the Ultralytics framework.

@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import os
 
-# Cap nhat phan import de ho tro LiteRT tren Python 3.13
+# Update import to support LiteRT on Python 3.13
 try:
     import ai_edge_litert.interpreter as tflite
 except ImportError:

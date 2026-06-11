@@ -6,7 +6,7 @@ face_cascade = cv2.CascadeClassifier(cascade_path)
 
 cap = cv2.VideoCapture(0)
 if not cap.isOpened():
-    raise RuntimeError("Khong mo duoc camera.")
+    raise RuntimeError("Cannot open camera.")
 
 num_frames = 200
 processed = 0
@@ -26,7 +26,7 @@ fps = processed / elapsed
 latency_ms = (elapsed / processed) * 1000
 cap.release()
 
-print(f"So frame: {processed}")
-print(f"Thoi gian tong: {elapsed:.3f} s")
-print(f"FPS trung binh: {fps:.2f}")
-print(f"Latency trung binh: {latency_ms:.2f} ms/frame")
+print(f"Frames: {processed}")
+print(f"Total time: {elapsed:.3f} s")
+print(f"Average FPS: {fps:.2f}")
+print(f"Average latency: {latency_ms:.2f} ms/frame")

@@ -3,33 +3,33 @@ import time
 import cv2 
 import paho.mqtt.client as mqtt 
 
-# Cấu hình MQTT
+# MQTT Configuration
 BROKER = "localhost" 
 PORT = 1883 
 TOPIC = "edgeai/face_detection"
 
-# Cấu hình Camera và Logic
+# Camera and Logic Configuration
 CAMERA_INDEX = 0 
 FRAME_WIDTH = 640 
 FRAME_HEIGHT = 480 
 PUBLISH_INTERVAL = 1.0 
 CONFIRM_FRAMES = 3 
 
-# Thiết lập kết nối MQTT
+# Setup MQTT Connection
 client = mqtt.Client() 
 client.connect(BROKER, PORT, 60) 
 
-# Tải bộ lọc Haar Cascade
+# Load Haar Cascade filter
 cascade_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
 face_cascade = cv2.CascadeClassifier(cascade_path)
 
-# Cấu hình Camera
+# Camera Configuration
 cap = cv2.VideoCapture(CAMERA_INDEX)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
 
 if not cap.isOpened():
-    raise RuntimeError("Khong mo duoc camera. Hay kiem tra camera va CAMERA_INDEX.") 
+    raise RuntimeError("Cannot open camera. Please check the camera and CAMERA_INDEX.") 
 
 last_publish = 0.0 
 detection_streak = 0 
@@ -40,7 +40,7 @@ try:
     while True:
         ret, frame = cap.read()
         if not ret:
-            print("Khong doc duoc frame tu camera.")
+            print("Cannot read frame from camera.")
             time.sleep(0.1)
             continue
             

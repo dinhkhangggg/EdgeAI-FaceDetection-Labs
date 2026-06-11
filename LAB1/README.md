@@ -1,50 +1,50 @@
-# Báo Cáo Thực Hành Lab 1
-**Chủ đề: Thu thập và xử lý dữ liệu cho bài toán Face Detection**
+# Lab 1 Practical Report
+**Topic: Data Collection and Processing for Face Detection**
 
-## Mục tiêu bài Lab
-1. Xây dựng bộ dữ liệu (dataset) hình ảnh khuôn mặt được gán nhãn (bounding box) để phục vụ cho việc huấn luyện mô hình AI phát hiện khuôn mặt (Face Detection).
-2. Thu thập dữ liệu thực tế với độ đa dạng cao về ánh sáng, góc độ và đối tượng.
-3. Sử dụng thư viện OpenCV và thuật toán Haar Cascade để tự động hóa quy trình gán nhãn.
-4. Hiểu rõ cấu trúc lưu trữ dataset chuẩn.
+## Lab Objectives
+1. Build a dataset of face images with bounding box labels to train an AI model for Face Detection.
+2. Collect real-world data with high diversity in lighting, angles, and subjects.
+3. Use the OpenCV library and Haar Cascade algorithm to automate the labeling process.
+4. Understand standard dataset storage structures.
 
-## Cấu trúc thư mục Dataset
-Bộ dữ liệu cần được đặt đúng cấu trúc để script xử lý chính xác:
+## Dataset Folder Structure
+The dataset must follow this structure for scripts to process it correctly:
 ```
 face_detection_dataset/
-├── images/     # Nơi chứa các ảnh đầu vào (.jpg, .png...)
-├── labels/     # Nơi tự động sinh ra các file label (.txt)
-└── logs/       # Nơi lưu file log cảnh báo ảnh không tìm thấy khuôn mặt
+├── images/     # Input images (.jpg, .png...)
+├── labels/     # Automatically generated label files (.txt)
+└── logs/       # Logs warning about images with no detected faces
 ```
-*Lưu ý: Ảnh đầu vào nên đặt tên theo quy tắc `TenNguoi_SoThuTu.jpg` (Ví dụ: `Khang_01.jpg`)*
+*Note: Input images should be named following the rule `PersonName_Sequence.jpg` (e.g., `Khang_01.jpg`)*
 
-## Hướng dẫn sử dụng các Script
+## Script Usage Guide
 
-Trong folder này có 2 script chính được trích xuất từ báo cáo:
+This folder contains 2 main scripts extracted from the report:
 
-### 1. Script cơ bản (`02_auto_label_faces.py`)
-Sử dụng mô hình Haar Cascade mặc định `haarcascade_frontalface_default.xml` để nhận diện khuôn mặt chính diện.
-- **Cách chạy:**
+### 1. Basic Script (`02_auto_label_faces.py`)
+Uses the default Haar Cascade model `haarcascade_frontalface_default.xml` to detect frontal faces.
+- **How to run:**
   ```bash
   python 02_auto_label_faces.py
   ```
-- **Hạn chế:** Chỉ nhận diện tốt các góc mặt thẳng, ánh sáng đều. Không hiệu quả với các ảnh chụp góc nghiêng hoặc lóa sáng.
+- **Limitations:** Only works well for straight face angles and even lighting. Ineffective for side angles or overexposed images.
 
-### 2. Script nâng cao (`02_auto_label_faces_advanced.py`)
-Phiên bản cải tiến này khắc phục nhược điểm của phiên bản cơ bản thông qua "Chiến thuật 3 bước":
-1. **Bước 1:** Quét chính diện (Frontal view).
-2. **Bước 2:** Nếu không thấy, quét góc nghiêng (Profile view) bằng `haarcascade_profileface.xml`.
-3. **Bước 3:** Nếu vẫn không thấy, lật ngược ảnh (Flip) và quét nghiêng lần nữa để bắt được các hướng nghiêng bên kia.
+### 2. Advanced Script (`02_auto_label_faces_advanced.py`)
+This improved version overcomes the basic version's weaknesses using a "3-step strategy":
+1. **Step 1:** Frontal view scan.
+2. **Step 2:** If not found, profile view scan using `haarcascade_profileface.xml`.
+3. **Step 3:** If still not found, flip the image horizontally and scan the profile again to catch opposite side angles.
 
-- **Cách chạy:**
+- **How to run:**
   ```bash
   python 02_auto_label_faces_advanced.py
   ```
 
-## Yêu cầu môi trường
+## Environment Requirements
 - Python 3.x
 - OpenCV (`pip install opencv-python`)
-- Môi trường nên chạy trên Raspberry Pi 4 8GB hoặc máy tính cá nhân.
+- Environment should be run on a Raspberry Pi 4 8GB or a personal computer.
 
-## Kết luận & Đề xuất (Từ báo cáo)
-- Việc dùng điện thoại thu thập ảnh mang lại chất lượng tốt hơn webcam máy tính.
-- Để khắc phục hoàn toàn nhược điểm góc nghiêng hoặc bị che khuất, có thể chuyển sang sử dụng các mô hình Deep Learning như MTCNN hoặc YOLO.
+## Conclusions & Recommendations (From the report)
+- Using a smartphone for data collection yields better quality than a laptop webcam.
+- To fully overcome the limitations of side angles or occlusions, Deep Learning models like MTCNN or YOLO should be considered instead.

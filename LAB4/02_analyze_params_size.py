@@ -37,7 +37,7 @@ def main():
     print(f"Reduction: {(1 - s2/s1)*100:.2f}%")
     
     print("\n===== FLOPs (BEST MODEL) =====")
-    print("Chay dong duoi de xem FLOPs:")
+    print("Run the line below to view FLOPs:")
     y1.info(verbose=True)
 
 if __name__ == "__main__":

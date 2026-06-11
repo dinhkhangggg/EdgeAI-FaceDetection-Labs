@@ -7,7 +7,7 @@ WEIGHTS_IN = "best.pt"
 WEIGHTS_OUT = "pruned.pt"
 PRUNE_RATIO = 0.4
 
-# ===== HAM PRUNE CHO 1 LOP CONV + BN =====
+# ===== PRUNE FUNCTION FOR 1 CONV + BN LAYER =====
 def prune_conv_safe(conv, bn, ratio):
     if not isinstance(conv, nn.Conv2d):
         return 0
@@ -16,7 +16,7 @@ def prune_conv_safe(conv, bn, ratio):
     if out_ch - n_prune < 8:
         return 0
         
-    # ===== TINH DO QUAN TRONG =====
+    # ===== CALCULATE IMPORTANCE =====
     importance = bn.weight.abs().detach()
     idx = torch.argsort(importance)[:n_prune]
     
@@ -35,7 +35,7 @@ def prune_conv_safe(conv, bn, ratio):
     
     return n_prune
 
-# ===== HAM MAIN =====
+# ===== MAIN FUNCTION =====
 def main():
     print("Load model...")
     y = YOLO(WEIGHTS_IN)
@@ -44,7 +44,7 @@ def main():
     
     print("Pruning backbone + neck (safe)...")
     for m in model.modules():
-        # CASE 1: layer co conv + bn
+        # CASE 1: layer with conv + bn
         if hasattr(m, "conv") and hasattr(m, "bn"):
             total_pruned += prune_conv_safe(m.conv, m.bn, PRUNE_RATIO)
         # CASE 2: block C2f
@@ -57,7 +57,7 @@ def main():
                     
     print(f"Total pruned channels: {total_pruned}")
     
-    # ===== LUU MODEL =====
+    # ===== SAVE MODEL =====
     y.save(WEIGHTS_OUT)
     print("Saved:", WEIGHTS_OUT)
 

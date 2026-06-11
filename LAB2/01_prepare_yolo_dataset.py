@@ -4,13 +4,13 @@ import shutil
 from pathlib import Path
 
 # =========================
-# INPUT từ lab trước
+# INPUT from previous lab
 # =========================
 SRC_IMG_DIR = "face_detection_dataset/images"
-SRC_LBL_DIR = "face_detection_dataset/labels_yolo"  # tạo ở bước convert_to_yolo
+SRC_LBL_DIR = "face_detection_dataset/labels_yolo"  # created in convert_to_yolo step
 
 # =========================
-# OUTPUT chuẩn YOLO
+# Standard YOLO OUTPUT
 # =========================
 OUT_DIR = "dataset_yolo"
 SEED = 42
@@ -18,7 +18,7 @@ TRAIN_RATIO = 0.70
 VAL_RATIO = 0.15
 TEST_RATIO = 0.15
 
-CLASS_NAMES = ["face"]  # 1 lớp
+CLASS_NAMES = ["face"]  # 1 class
 
 def ensure_dirs():
     for p in [
@@ -42,7 +42,7 @@ def copy_pair(img_name, split):
     dst_lbl = Path(OUT_DIR) / "labels" / split / lbl_name
 
     shutil.copy2(src_img, dst_img)
-    # nếu label không tồn tại, tạo file rỗng để đồng bộ
+    # if label doesn't exist, create an empty file to synchronize
     if src_lbl.exists():
         shutil.copy2(src_lbl, dst_lbl)
     else:
@@ -50,7 +50,7 @@ def copy_pair(img_name, split):
 
 def write_yaml():
     yaml_path = Path(OUT_DIR) / "data.yaml"
-    # đường dẫn tương đối, Ultralytics sẽ resolve theo nơi chạy
+    # relative path, Ultralytics will resolve based on execution directory
     content = f"""path: {OUT_DIR}
 train: images/train
 val: images/val
@@ -66,7 +66,7 @@ def main():
     ensure_dirs()
     imgs = list_images()
     if len(imgs) == 0:
-        raise RuntimeError("Khong tim thay anh trong SRC_IMG_DIR")
+        raise RuntimeError("No images found in SRC_IMG_DIR")
     random.seed(SEED)
     random.shuffle(imgs)
     n = len(imgs)

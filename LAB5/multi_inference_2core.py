@@ -7,9 +7,9 @@ os.environ["QT_QPA_PLATFORM"] = "xcb"
 
 def parse_args():
     p = argparse.ArgumentParser()
-    p.add_argument("--model", type=str, default="best_int8_320.tflite", help="Đường dẫn file TFLite")
-    p.add_argument("--queue-size", type=int, default=2, help="Kích thước hàng đợi")
-    p.add_argument("--imgsz", type=int, default=320, help="Kích thước ảnh cho AI")
+    p.add_argument("--model", type=str, default="best_int8_320.tflite", help="TFLite file path")
+    p.add_argument("--queue-size", type=int, default=2, help="Queue size")
+    p.add_argument("--imgsz", type=int, default=320, help="Image size for AI")
     return p.parse_args()
 
 def capture_worker(q_in_1, q_in_2, stop_event):
@@ -138,7 +138,7 @@ if __name__ == "__main__":
 
             if cv2.waitKey(1) & 0xFF == ord('q'): break
     finally:
-        print("\nĐang dọn dẹp hệ thống...")
+        print("\nCleaning up system...")
         stop_event.set()
         for p in processes: p.join(timeout=1)
         for p in processes: 

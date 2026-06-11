@@ -1,90 +1,90 @@
 # 🚀 Edge AI & IoT (AIoT) on Raspberry Pi 4
-**Repository tổng hợp mã nguồn và báo cáo thực hành (LAB 1 - LAB 7)**
+**Comprehensive Repository of Source Code and Lab Reports (LAB 1 - LAB 7)**
 
-Repository này chứa toàn bộ mã nguồn, tài liệu và các script tối ưu hóa hiệu năng (Benchmarking, Multithreading, Multiprocessing, MQTT) được xây dựng trong quá trình thực hành bộ môn AIoT (Trí tuệ nhân tạo vạn vật) triển khai trên phần cứng Edge Device (Raspberry Pi 4 8GB).
+This repository contains all source code, documentation, and performance optimization scripts (Benchmarking, Multithreading, Multiprocessing, MQTT) developed during the AIoT (Artificial Intelligence of Things) course, deployed on an Edge Device (Raspberry Pi 4 8GB).
 
 ---
 
-## 📂 Cấu trúc Repository
+## 📂 Repository Structure
 
-Hệ thống bài thực hành được chia thành 7 LAB, với mức độ phức tạp và tối ưu hóa tăng dần:
+The practical exercises are divided into 7 LABs, with increasing complexity and optimization levels:
 
-### 🔹 [LAB 1: Triển khai Image Classification cơ bản](./LAB1)
-- Trích xuất và chạy mô hình mạng neural (MobileNetV2, ResNet) trên thiết bị nhúng.
-- Làm quen với TensorFlow Lite (TFLite) và cấu trúc pipeline phân loại hình ảnh cơ bản.
+### 🔹 [LAB 1: Basic Image Classification Deployment](./LAB1)
+- Extract and run neural network models (MobileNetV2, ResNet) on an embedded device.
+- Get familiar with TensorFlow Lite (TFLite) and the basic image classification pipeline structure.
 
-### 🔹 [LAB 2: Khám phá Face Detection truyền thống](./LAB2)
-- Cài đặt và đo lường hiệu suất của các thuật toán nhận diện khuôn mặt như Haar Cascade và MTCNN.
-- So sánh các phương pháp trích xuất đặc trưng truyền thống với mạng học sâu.
+### 🔹 [LAB 2: Exploring Traditional Face Detection](./LAB2)
+- Install and measure the performance of traditional face detection algorithms like Haar Cascade and MTCNN.
+- Compare traditional feature extraction methods with deep learning networks.
 
-### 🔹 [LAB 3: Triển khai YOLOv8 TFLite](./LAB3)
-- Đưa mô hình phát hiện đối tượng/khuôn mặt hiện đại (YOLOv8) lên Raspberry Pi.
-- Áp dụng kỹ thuật Lượng tử hóa mô hình (Post-Training Quantization - INT8) để giảm kích thước model và tăng tốc độ suy luận.
+### 🔹 [LAB 3: YOLOv8 TFLite Deployment](./LAB3)
+- Deploy modern object/face detection models (YOLOv8) on Raspberry Pi.
+- Apply Post-Training Quantization (INT8) techniques to reduce model size and accelerate inference speed.
 
-### 🔹 [LAB 4: Tối ưu hoá Bộ phân loại và Phân tích Bottleneck](./LAB4)
-- Triển khai và đo lường sự khác biệt về End-to-End Latency.
-- Đánh giá năng lực của phần cứng khi chịu tải liên tục bằng các script benchmark vòng lặp.
+### 🔹 [LAB 4: Classifier Optimization & Bottleneck Analysis](./LAB4)
+- Deploy and measure differences in End-to-End Latency.
+- Evaluate hardware capacity under continuous load using looped benchmark scripts.
 
 ### 🔹 [LAB 5: Multi-Process Pipeline & Queue](./LAB5)
-- Đập bỏ kiến trúc Single-Process (Đơn tiến trình) truyền thống.
-- Thiết kế hệ thống Đa tiến trình (Multi-Process) sử dụng `multiprocessing.Queue` để phân tải I/O (Camera) và tính toán (AI) lên các nhân CPU (Core) khác nhau của Raspberry Pi.
-- Phân tích hiện tượng nghẽn băng thông bộ nhớ (IPC Bottleneck).
+- Dismantle the traditional Single-Process architecture.
+- Design a Multi-Process system using `multiprocessing.Queue` to distribute I/O (Camera) and computation (AI) across different CPU cores of the Raspberry Pi.
+- Analyze memory bandwidth bottlenecks (IPC Bottleneck).
 
 ### 🔹 [LAB 6: Multi-Threading vs Multi-Processing](./LAB6)
-- Đánh giá toàn diện sự khác biệt giữa xử lý Đa luồng (Multi-threading) và Đa tiến trình.
-- Kỹ thuật vượt rào GIL (Global Interpreter Lock) của Python sử dụng backend C++ của TFLite, đạt tới kiến trúc Zero-copy memory tối ưu nhất cho thiết bị biên.
+- Comprehensively evaluate the differences between Multi-threading and Multi-processing.
+- Bypass Python's GIL (Global Interpreter Lock) using the TFLite C++ backend, achieving the optimal Zero-copy memory architecture for edge devices.
 
-### 🔹 [LAB 7: Tích hợp Edge AI và MQTT (AIoT Pipeline)](./LAB7)
-- Đưa hệ thống lên mạng lưới IoT bằng giao thức MQTT.
-- Xây dựng Flask Dashboard trên Laptop để theo dõi thông số Telemetry (FPS, Latency, số lượng người) theo thời gian thực từ Raspberry Pi truyền về.
-- Xử lý các vấn đề suy giảm hiệu suất khi kết hợp Pub/Sub đồng thời với luồng AI.
+### 🔹 [LAB 7: Edge AI and MQTT Integration (AIoT Pipeline)](./LAB7)
+- Bring the system to the IoT network via the MQTT protocol.
+- Build a Flask Dashboard on a Laptop to monitor real-time Telemetry parameters (FPS, Latency, Face Count) transmitted from the Raspberry Pi.
+- Resolve performance degradation issues when combining Pub/Sub concurrently with the AI thread.
 
 ---
 
-## 🛠 Yêu cầu Hệ thống (Hardware & Software)
+## 🛠 System Requirements (Hardware & Software)
 
-- **Phần cứng**: Raspberry Pi 4 (khuyến nghị bản 4GB/8GB RAM) hoặc Raspberry Pi 5.
-- **Hệ điều hành**: Raspberry Pi OS (64-bit) / Ubuntu Server.
-- **Camera**: USB Webcam hoặc Pi Camera (Giao tiếp qua V4L2).
-- **Phần mềm / Thư viện**:
+- **Hardware**: Raspberry Pi 4 (4GB/8GB RAM recommended) or Raspberry Pi 5.
+- **OS**: Raspberry Pi OS (64-bit) / Ubuntu Server.
+- **Camera**: USB Webcam or Pi Camera (via V4L2).
+- **Software / Libraries**:
   - `Python >= 3.9`
-  - `opencv-python` (Hỗ trợ xử lý ảnh)
-  - `tflite_runtime` (Bản rút gọn của TensorFlow, tối ưu cho thiết bị Edge)
-  - `paho-mqtt` (Giao tiếp IoT)
-  - `Flask` (Xây dựng Dashboard Web)
+  - `opencv-python` (Image processing support)
+  - `tflite_runtime` (Lightweight TensorFlow, optimized for Edge devices)
+  - `paho-mqtt` (IoT Communication)
+  - `Flask` (Web Dashboard builder)
 
 ---
 
-## ⚙️ Hướng dẫn cài đặt môi trường nhanh
+## ⚙️ Quick Environment Setup Guide
 
-Tạo môi trường ảo (Virtual Environment) và cài đặt các gói cần thiết trên Raspberry Pi:
+Create a Virtual Environment and install the required packages on your Raspberry Pi:
 
 ```bash
-# 1. Cập nhật hệ thống
+# 1. Update the system
 sudo apt update && sudo apt upgrade -y
 
-# 2. Cài đặt các thư viện lõi hệ thống
+# 2. Install core system libraries
 sudo apt install libgl1-mesa-glx mosquitto mosquitto-clients -y
 
-# 3. Tạo môi trường ảo và kích hoạt
+# 3. Create and activate a virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
 
-# 4. Cài đặt Python packages
+# 4. Install Python packages
 pip install --upgrade pip
 pip install opencv-python numpy paho-mqtt flask
-# Lưu ý: Cài đặt tflite-runtime phù hợp với kiến trúc ARM64 của Pi
+# Note: Install tflite-runtime compatible with the Pi's ARM64 architecture
 pip install tflite-runtime
 ```
 
 ---
 
-## 📊 Hệ thống Đo lường và Đánh giá hiệu năng (Telemetry & Benchmark)
-Xuyên suốt các Lab (từ Lab 5 đến 7), repository tích hợp một module `utils.py` cực kỳ mạnh mẽ chứa **Bộ giám sát hiệu năng**. Module này chịu trách nhiệm:
-- Bóc tách và đo lường độ trễ (Latency) tới mức mili-giây của từng Node: `Capture (I/O)`, `Inference (Compute)`, `Display (Render)`.
-- Xác định điểm nghẽn (Bottleneck) chính xác yếu điểm của hệ thống.
-- Thực thi thuật toán `NMS` (Non-Maximum Suppression) phiên bản thuần `NumPy` để loại bỏ sự phụ thuộc nặng nề vào TensorFlow backend.
+## 📊 Telemetry & Benchmark System
+Throughout the Labs (from Lab 5 to 7), the repository integrates an extremely powerful `utils.py` module containing a **Performance Monitor (Telemetry Profiler)**. This module is responsible for:
+- Extracting and measuring millisecond-level Latency for each Node: `Capture (I/O)`, `Inference (Compute)`, `Display (Render)`.
+- Identifying bottlenecks to pinpoint exact system weaknesses.
+- Executing the `NMS` (Non-Maximum Suppression) algorithm in pure `NumPy` to eliminate heavy reliance on the TensorFlow backend.
 
 ---
 
-*Project được thực hiện và tối ưu dành riêng cho môn học AIoT / Hệ thống nhúng thời gian thực.*
+*This project is implemented and optimized specifically for the AIoT / Real-Time Embedded Systems course.*

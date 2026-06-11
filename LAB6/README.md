@@ -1,29 +1,29 @@
-# Báo Cáo Thực Hành Lab 6
-**Chủ đề: Tối ưu Face Detection bằng Multithreading và Multiprocessing trên Raspberry Pi**
+# Lab 6 Practical Report
+**Topic: Optimizing Face Detection with Multithreading and Multiprocessing on Raspberry Pi**
 
-## Mục tiêu bài Lab
-Triển khai nhận diện khuôn mặt bằng YOLOv8 với mô hình TFLite INT8 trên mạch Raspberry Pi. Đồng thời đo đạc và so sánh hiệu suất khi ứng dụng 3 kiến trúc lập trình khác nhau để phân tích đặc tính:
-1. Single Process (Đơn tiến trình tuần tự)
-2. Multi-threading (Đa luồng trên cùng vùng nhớ)
-3. Multi-processing (Đa tiến trình giao tiếp qua Queue)
+## Lab Objectives
+Deploy Face Detection using YOLOv8 with the TFLite INT8 model on a Raspberry Pi board. Simultaneously measure and compare performance when applying 3 different programming architectures to analyze their characteristics:
+1. Single Process (Sequential execution)
+2. Multi-threading (Shared memory space)
+3. Multi-processing (IPC via Queue)
 
-## Cấu trúc thư mục Script
+## Script Folder Structure
 
-- **`utils.py`**: Chứa thuật toán Non-Maximum Suppression (NMS) phiên bản NumPy và hệ thống Telemetry Profiler để thống kê FPS, Latency và mức tải CPU theo thời gian thực.
-- **`single_inference.py`**: Kiến trúc tiêu chuẩn. Pipeline thực thi tuần tự từ bước Capture I/O -> Preprocess/Inference -> NMS/Display. 
-- **`multi_thread_inference.py`**: Kiến trúc Producer-Consumer chia tài nguyên hệ thống thành 2 luồng độc lập: một luồng Camera liên tục đẩy ảnh vào Queue, một luồng AI lấy ảnh ra dự đoán. Giao tiếp qua RAM nội bộ với zero-copy.
-- **`multi_process_inference.py`**: Kiến trúc Đa tiến trình, chia 3 khâu Camera, AI và Display ra thành 3 Process hoàn toàn cách ly với nhau về tài nguyên phần cứng (được ép vào các nhân CPU khác nhau thông qua Process Affinity), giao tiếp bằng OS Queue.
+- **`utils.py`**: Contains the NumPy version of the Non-Maximum Suppression (NMS) algorithm and a Telemetry Profiler system to track FPS, Latency, and CPU load in real-time.
+- **`single_inference.py`**: Baseline architecture. Pipeline executes sequentially from Capture I/O -> Preprocess/Inference -> NMS/Display. 
+- **`multi_thread_inference.py`**: Producer-Consumer architecture dividing system resources into 2 independent threads: one Camera thread continuously pushing images to a Queue, and an AI thread popping images for prediction. Communication via internal RAM with zero-copy.
+- **`multi_process_inference.py`**: Multi-process architecture, splitting the 3 stages of Camera, AI, and Display into 3 completely isolated hardware resource Processes (pinned to different CPU cores via Process Affinity), communicating via OS Queue.
 
-## Kết quả thực nghiệm và nhận xét
-Ở độ phân giải nhận diện **640x640**:
+## Experimental Results and Remarks
+At **640x640** detection resolution:
 
-| Cấu hình | FPS End-to-End | AI Latency (ms) | Hiện tượng nổi bật |
+| Configuration | End-to-End FPS | AI Latency (ms) | Notable Phenomenon |
 |----------|---------------|----------------|--------------------|
-| **Single Process** | 1.85 FPS | ~510 ms | Luồng tuần tự chậm, Camera chờ AI. |
-| **Multi-Thread**   | **2.15 FPS** | **~465 ms** | Giải phóng GIL ở TFLite, luồng chạy mượt nhất. |
-| **Multi-Process**  | 1.48 - 1.62 FPS | ~598 - 640 ms | Nghẽn I/O (Bottleneck) khi truyền ảnh 640 qua OS Pipe. |
+| **Single Process** | 1.85 FPS | ~510 ms | Slow sequential thread, Camera waiting for AI. |
+| **Multi-Thread**   | **2.15 FPS** | **~465 ms** | GIL released in TFLite, smoothest running thread. |
+| **Multi-Process**  | 1.48 - 1.62 FPS | ~598 - 640 ms | I/O Bottleneck when passing 640 image via OS Pipe. |
 
-**Nhận xét cốt lõi:**
-1. **Multi-Threading (Đa luồng)** mang lại hiệu năng cao nhất trên ảnh phân giải lớn (640x640). Mặc dù Python bị giới hạn bởi GIL, TFLite gọi xuống backend C++ đã tự giải phóng khóa GIL này. Các thread trao đổi hình ảnh với độ trễ gần như bằng 0 (Zero-copy memory).
-2. **Multi-Processing (Đa tiến trình)** với độ phân giải lớn bị rơi vào bẫy nghẽn cổ chai IPC (Inter-Process Communication). Mỗi khung hình đẩy từ tiến trình Camera sang tiến trình AI buộc OS phải Serialize và Deserialize (Pickling), khiến Latency tăng vọt.
-3. Kỹ thuật đưa Camera vào luồng/tiến trình riêng biệt đi kèm cơ chế tự xả rỗng Queue (Flush) giúp Camera loại bỏ độ trễ và luôn lấy ảnh mới nhất (Zero-Latency I/O).
+**Core Remarks:**
+1. **Multi-Threading** brings the highest performance on high-resolution images (640x640). Although Python is restricted by the GIL, TFLite calls the C++ backend which automatically releases this GIL lock. Threads exchange images with near-zero latency (Zero-copy memory).
+2. **Multi-Processing** with large resolutions falls into the IPC (Inter-Process Communication) bottleneck trap. Every frame pushed from the Camera process to the AI process forces the OS to Serialize and Deserialize (Pickling), causing Latency to spike.
+3. The technique of isolating the Camera into a separate thread/process coupled with an auto-flush mechanism helps the Camera eliminate latency and always fetch the newest image (Zero-Latency I/O).

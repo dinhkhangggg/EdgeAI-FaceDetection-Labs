@@ -61,7 +61,7 @@ def run_benchmark():
     mean_val = np.mean(latencies)
     fps = 1000.0 / mean_val
     
-    # ===== IN KET QUA =====
+    # ===== PRINT RESULTS =====
     print("\n" + "="*45)
     print(f"{'Metric':<25} | {'Value':<15}")
     print("-" * 45)

@@ -8,7 +8,7 @@ except Exception:
 tflitemohinh_path = "best_full_integer_quant.tflite"  
 
 if tf is None:
-    print("Cai tensorflow de kiem tra chi tiet IO.")
+    print("Install tensorflow to check IO details.")
 else:
     itp = tf.lite.Interpreter(model_path=tflitemohinh_path)
     itp.allocate_tensors()

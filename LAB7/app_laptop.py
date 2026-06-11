@@ -142,7 +142,7 @@ def index():
                 cv2.IMREAD_COLOR
             )
             gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-            # ===== DETECT (SIET CHAT) =====
+            # ===== DETECT (STRICT) =====
             faces=face_cascade.detectMultiScale(
                 gray,
                 scaleFactor=1.2,

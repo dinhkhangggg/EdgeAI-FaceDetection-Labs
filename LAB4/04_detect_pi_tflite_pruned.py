@@ -21,7 +21,7 @@ out_dtype = output_details[0]['dtype']
 img = cv2.imread(IMAGE_PATH)
 h, w, _ = img.shape
 
-# ===== SCALE AUTO (QUAN TRONG) =====
+# ===== SCALE AUTO (IMPORTANT) =====
 scale_ui = max(h, w) / 640
 thickness = int(3 * scale_ui)
 font_scale = 1.2 * scale_ui
@@ -89,7 +89,7 @@ if len(indices) > 0:
         
     print("Detected:", len(indices), "faces")
 else:
-    print("Khong detect duoc gi")
+    print("Nothing detected")
 
 # ===== SAVE =====
 cv2.imwrite("result.jpg", img)
