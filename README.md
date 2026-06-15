@@ -1,7 +1,7 @@
 # 🚀 Edge AI & IoT (AIoT) on Raspberry Pi 4
 **Comprehensive Repository of Source Code and Lab Reports (LAB 1 - LAB 7)**
 
-This repository contains all source code, documentation, and performance optimization scripts (Benchmarking, Multithreading, Multiprocessing, MQTT) developed during the AIoT (Artificial Intelligence of Things) course, deployed on an Edge Device (Raspberry Pi 4 8GB).
+This repository contains all source code, documentation, and performance optimization scripts (Benchmarking, Multithreading, Multiprocessing, MQTT) developed during the AIoT (Artificial Intelligence of Things) course, deployed on an Edge Device (Raspberry Pi 4 Model B8GB).
 
 ---
 
